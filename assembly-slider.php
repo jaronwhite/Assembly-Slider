@@ -81,13 +81,6 @@ function rgm_slider() {
 	$slide_table_name  = $wpdb->prefix . 'assembly_slides';
 	$slider_table_name = $wpdb->prefix . 'assembly_sliders';
 
-	// Check if slider exists. If yes, update/replace row, else insert
-	$exists = $wpdb->get_var( $wpdb->prepare(
-		"SELECT slider_id
-			FROM $slider_table_name
-			WHERE slider_id = %s",
-		$slider->slider_id
-	) );
 
 	echo $slider->slides[0]->layers[0]->css[0]->style_id;
 	/*
@@ -97,7 +90,7 @@ function rgm_slider() {
 	if ( is_null( $slider->b_control ) ) {
 		$bControl = true;
 	}
-	$wpdb->insert( $slider_table_name, array(
+	$wpdb->replace( $slider_table_name, array(
 		'slider_id'    => $slider->slider_id,
 		'slider_name'  => $slider->slider_name,
 		'date_created' => $slider->date_created,
@@ -108,7 +101,7 @@ function rgm_slider() {
 	) );
 
 	foreach ( $slider->slides as $slide ) {
-		$wpdb->insert( $slide_table_name, array(
+		$wpdb->replace( $slide_table_name, array(
 			'slide_id'     => $slide->slide_id,
 			'date_created' => $slide->date_created,
 			'slide_order'  => $slide->slide_order,
@@ -118,7 +111,7 @@ function rgm_slider() {
 		) );
 
 		foreach ( $slide->layers as $layer ) {
-			$wpdb->insert( $layer_table_name, array(
+			$wpdb->replace( $layer_table_name, array(
 				'layer_id'        => $layer->layer_id,
 				'date_created'    => $layer->date_created,
 				'type'            => $layer->type,
@@ -130,7 +123,7 @@ function rgm_slider() {
 			) );
 
 			foreach ( $layer->css as $style ) {
-				$wpdb->insert( $style_table_name, array(
+				$wpdb->replace( $style_table_name, array(
 					'style_id'      => $style->style_id,
 					'date_created'  => $style->date_created,
 					'media_query'   => $style->media_query,
